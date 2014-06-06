@@ -36,7 +36,7 @@ app.routers.AppRouter = Backbone.Router.extend({
                
                 // delegate events when the view is recycled
             }
-            app.homeView.bindScript();
+            app.homeView.bindScrollScript();
             app.slider.slidePage(app.homeView.$el);
         
     },

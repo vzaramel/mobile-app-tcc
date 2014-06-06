@@ -11,77 +11,32 @@ app.views.HomeView = Backbone.View.extend({
     render: function () {
         this.$el.html(this.template());
         $('.list', this.el).append(this.resultsView.render().el);
-        console.log("render");
+        //console.log("render");
         
         return this;   
     },
     
-    bindScript: function(){
+    bindScrollScript: function(){
         
         var def = $.Deferred();
-        
-        var addProjects = function(data) {
-            $.each(data, function(i, item){
-                app.adapters.project.findById(item.ProjectId).done( function(data){
-                    var proj = data;
-                    var lastSaved = item.LastSaved;
-                    var createdOn = item.CreatedOn;
-                    if (proj === null) {
-                        proj = new app.models.Project({
-                            id : item.ProjectId,
-                            Name : item.Name,
-                            Description : item.Description,
-                            LastSaved : lastSaved,
-                            CreatedOn : createdOn
-                        });
-                        app.homeView.projectList.add(proj);
-                    }
-                    else{
-                        proj = app.homeView.projectList.get(item.ProjectId);
-                        if ( lastSaved != proj.get("LastSaved")){
-                            if ( proj.get("Updated") === "true"){
-                                proj.set("Updated", "false");
-                                proj.save();
-                            }
-                        }
-                    }
-                });
-            });
-            
-        };
-               
-       
-        var getList = function() {
-
-            if (app.homeView.info.get("logged_in")) {
-                $.get(app.serverAddr +"/Smartphone/LoadProjectList", {
-                    username : app.homeView.info.get('username'),
-                    passwordHash : app.homeView.info.get('passwordHash')
-                }, addProjects);
-            } else {
-                alert('Fazer Login Antes de atualizar lista');
-            }
-
-            def.resolve();
-        };
-    
-                       
+        var home = this;
         $('.scrollable', this.el).pullToRefresh({
             callback: function() {
-                setTimeout( getList, 200);
+                setTimeout( function(){ 
+                    home.projectList.getListFromServer(home.info);
+                    def.resolve(); 
+                }, 200);
                     return def.promise();
                 }
 
         });
     },
-
+    
     events: {
-        
         "keyup .search-key":    "search",
         "keypress .search-key": "onkeypress",
         "click .project-item": "onClick",
         "click #btn_teste": "teste"
-       
     },
     
     search: function (event) {
