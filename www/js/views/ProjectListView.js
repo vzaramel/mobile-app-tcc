@@ -4,11 +4,10 @@ app.views.ProjectListView = Backbone.View.extend({
 
     attributes: {class: 'topcoat-list list'},
 
-    initialize:function () {
+    initialize: function () {
         var self = this;
         this.model.on("reset", this.render, this);
         this.model.on("add", function (project) {
-            this.save(project);
             self.$el.append(new app.views.ProjectListItemView({model:project}).render().el);
         });
     },

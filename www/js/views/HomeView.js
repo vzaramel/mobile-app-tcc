@@ -11,8 +11,6 @@ app.views.HomeView = Backbone.View.extend({
     render: function () {
         this.$el.html(this.template());
         $('.list', this.el).append(this.resultsView.render().el);
-        //console.log("render");
-        
         return this;   
     },
     

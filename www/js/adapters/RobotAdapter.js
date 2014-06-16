@@ -2,8 +2,15 @@ app.Robot = (function () {
 
         mov_virar = function(angulo, dir){
             
+            
 		},
 		mov_ms = function(tempo, sentido){
+		    if ( sentido == 'frente'){
+		        
+		    }else
+		    {
+		        
+		    }
             
         },
         mov_cm = function(distancia, sentido){
@@ -38,9 +45,12 @@ app.Robot = (function () {
             return  leitura;
         };
         
+        sensor_ler_encoder = function(){
+            
+        };
+        
     // The public API
     return {
-        create: create,
         mov_virar :mov_virar,
         mov_ms : mov_ms,
         mov_cm : mov_cm,

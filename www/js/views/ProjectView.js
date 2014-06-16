@@ -1,28 +1,46 @@
 app.views.ProjectView = Backbone.View.extend({
-
+    
+    initialize: function () {
+        var self = this;
+        this.model.on("change", this.render,this);
+        this.model.on("destroy", this.close, this);
+    },
     render: function () {
         this.$el.html(this.template(this.model.attributes));
         return this;
     },
     
     requireData: function(){
-        if ( this.model.get("Updated") === "false"){
-            this.update();        
-        }       
+        if ( app.router.Authenticated){
+            if ( this.model.get("Updated") == "false"){
+                this.update();        
+            }       
+        }
     },
     
     update: function(){
-        $.get(app.serverAddr + "/Smartphone/LoadProjectCode", {
-                username : app.homeView.info.get('username'),
-                passwordHash : app.homeView.info.get('passwordHash'),
+        
+        if ( app.router.Authenticated) {
+            $.get(app.serverAddr + "/Smartphone/LoadProjectCode", {
+                username : app.homeView.info.get('Username'),
+                passwordHash : app.homeView.info.get('PasswordHash'),
                 projectID : this.model.get("id")
-        }, function(data){
-            var model = app.projectView.model;
-            model.set({"BlocklyCode" : data.BlocklyCode}, {"BlocklyData": data.BlocklyData}, {"Updated":"true"});
-            model.save();
-            
-        }); 
-         
+            }, function(data) {
+                var model = app.projectView.model;
+                
+                model.set({
+                    "BlocklyCode" : data.BlocklyCode,
+                    "BlocklyData" : data.BlocklyData,
+                    "Updated" : "true"
+                }); 
+
+                model.save();
+
+            });
+        }else{
+             alert('Fazer Login Antes de Atualizar o Projeto!');
+        }
+        
     },
 
     events: {
@@ -32,7 +50,7 @@ app.views.ProjectView = Backbone.View.extend({
     },
     
     start: function(event){
-        eval(this.model.get("BlocklyCode"))
+        eval(this.model.get("BlocklyCode"));
     },
     back: function(event) {
         window.history.back();

@@ -14,12 +14,12 @@ app.models.Project = Backbone.Model.extend({
     },
     sync: function(method, model, options) {
         if (method === "read") {
-            app.adapters.project.findById(parseInt(this.id)).done(function (data) {
+            app.adapters.webdb.project.findById(parseInt(this.id)).done(function (data) {
                 options.success(data);
             });
         }
         else if ( method === "update"){
-            app.adapters.project.update(this);
+            app.adapters.webdb.project.update(this);
         }
         
     }
@@ -32,24 +32,37 @@ app.models.ProjectCollection = Backbone.Collection.extend({
      
     sync: function(method, model, options) {
         if (method === "read") {
-            app.adapters.project.findAll().done(function (data) {
-                options.success(data);
-            });
+            if (app.loginView.info) {
+                var userId = app.loginView.info.get("id");
+                app.adapters.webdb.userProject.findByUserId(userId).done(function(data) {
+                    options.success(data);
+                });
+            }
+            else{
+                app.adapters.webdb.project.findAllWithCode().done(function(data) {
+                    options.success(data);
+                });
+            }
         }
         
     },
     
+    fetchItem: function(item){
+        
+    },
     save: function(model){
-        app.adapters.project.insert(model);
+        app.adapters.webdb.project.insert(model);
+        var userId = app.loginView.info.get("id");
+        app.adapters.webdb.userProject.insert(userId, model.get("id"));
     },
     
     getListFromServer: function(info) {
         
         var list = this;
-        if (info.get("logged_in")) {
+        if (app.router.Authenticated) {
             $.get(app.serverAddr + "/Smartphone/LoadProjectList", {
-                username : info.get('username'),
-                passwordHash : info.get('passwordHash')
+                username : info.get('Username'),
+                passwordHash : info.get('PasswordHash')
                 }, function(data){
                     $.each(data, function(i,item){
                         list.verifyItem(item);
@@ -64,7 +77,9 @@ app.models.ProjectCollection = Backbone.Collection.extend({
     
     verifyItem:  function(item) {
             var list = this;
-            app.adapters.project.findById(item.ProjectId).done( function(data){
+            var userId = app.homeView.info.get("id");
+            app.adapters.webdb.userProject.find( userId ,item.ProjectId).done( function(data){
+                
                 list.addOrUpdate(data,item);
             });
     },
@@ -75,7 +90,7 @@ app.models.ProjectCollection = Backbone.Collection.extend({
         var list = this;
         var lastSaved = item.LastSaved;
         var createdOn = item.CreatedOn;
-        if (proj === null) {
+        if (proj === null || proj.length == 0) {
             proj = new app.models.Project({
                 id : item.ProjectId,
                 Name : item.Name,
@@ -84,6 +99,7 @@ app.models.ProjectCollection = Backbone.Collection.extend({
                 CreatedOn : createdOn
             });
             list.add(proj);
+            list.save(proj);
         } else {
             proj = list.get(item.ProjectId);
             if (lastSaved != proj.get("LastSaved")) {
