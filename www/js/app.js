@@ -19,7 +19,7 @@ $(document).on("ready", function () {
             Backbone.history.start();
             app.serverAddr = "http://192.168.25.23:8080";
             
-        });
+        });    
        
 });
 

@@ -79,7 +79,6 @@ app.models.ProjectCollection = Backbone.Collection.extend({
             var list = this;
             var userId = app.homeView.info.get("id");
             app.adapters.webdb.userProject.find( userId ,item.ProjectId).done( function(data){
-                
                 list.addOrUpdate(data,item);
             });
     },

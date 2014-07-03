@@ -26,4 +26,5 @@
     <content src="index.html" />
     
     <access origin="*" />
+    
 </widget>
