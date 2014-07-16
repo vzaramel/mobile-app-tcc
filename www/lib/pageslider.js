@@ -11,7 +11,7 @@ function PageSlider(container) {
 
     this.back = function() {
         location.hash = stateHistory[stateHistory.length - 2];
-    }
+    };
 
     // Use this function if you want PageSlider to automatically determine the sliding direction based on the state history
     this.slidePage = function(page) {
@@ -32,7 +32,7 @@ function PageSlider(container) {
             this.slidePageFrom(page, 'page-right');
         }
 
-    }
+    };
 
     // Use this function directly if you want to control the sliding direction outside PageSlider
     this.slidePageFrom = function(page, from) {
@@ -59,6 +59,6 @@ function PageSlider(container) {
         page.attr("class", "page transition page-center");
         currentPage.attr("class", "page transition " + (from === "page-left" ? "page-right" : "page-left"));
         currentPage = page;
-    }
+    };
 
 }

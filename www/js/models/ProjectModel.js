@@ -21,7 +21,10 @@ app.models.Project = Backbone.Model.extend({
         else if ( method === "update"){
             app.adapters.webdb.project.update(this);
         }
-        
+        else if ( method === "delete")
+        {
+            app.adapters.webdb.project.deleteProject(model.id);
+        }
     }
 
 });
@@ -34,15 +37,32 @@ app.models.ProjectCollection = Backbone.Collection.extend({
         if (method === "read") {
             if (app.loginView.info) {
                 var userId = app.loginView.info.get("id");
-                app.adapters.webdb.userProject.findByUserId(userId).done(function(data) {
+                if (typeof options.data === 'undefined') {
+                    app.adapters.webdb.userProject.findByUserId(userId).done(function(data) {
+                        options.success(data);
+                    });
+                } else if (options.data.field == 'Name') {
+                    app.adapters.webdb.userProject.findByUserIdAndContains(userId,options.data.key)
+                    .done(function(data) {
+                        options.success(data);
+                    });
+                }
+            }else
+            {
+                if (typeof options.data === 'undefined') {
+                   app.adapters.webdb.project.findAllWithCode().done(function(data) {
                     options.success(data);
-                });
+                    });
+                } else if (options.data.field == 'Name') {
+                    app.adapters.webdb.project.findAllWithCodeAndContains(options.data.key)
+                    .done(function(data) {
+                        options.success(data);
+                    });
+                }
             }
-            else{
-                app.adapters.webdb.project.findAllWithCode().done(function(data) {
-                    options.success(data);
-                });
-            }
+        }
+        else if ( method === "delete"){
+            this.remove(model);
         }
         
     },

@@ -31,7 +31,8 @@ app.views.ProjectView = Backbone.View.extend({
                 model.set({
                     "BlocklyCode" : data.BlocklyCode,
                     "BlocklyData" : data.BlocklyData,
-                    "Updated" : "true"
+                    "Updated" : "true",
+                    "LastSaved": data.LastSaved
                 }); 
 
                 model.save();
@@ -45,14 +46,30 @@ app.views.ProjectView = Backbone.View.extend({
 
     events: {
         "click .back-button": "back",
-        "click .start-button": "start",
-        "click .update-button": "update"
+        "click .start-button":"start",
+        "click .stop-button": "stop",
+        "click .update-button": "update",
+        "click .trash"      :  "onDelete"
+    },
+    
+    onDelete: function(event){
+        var response = confirm("Certeza que deseja deletar o projeto?");
+        if( response){
+            //+this.model.get("id")
+            this.model.destroy();
+            window.history.back();
+            //this = undefined;
+        }
     },
     
     start: function(event){
         eval(this.model.get("BlocklyCode"));
     },
+    stop: function(event){
+        app.Robot.Control.destroy();
+    },
     back: function(event) {
+        this.stop();
         window.history.back();
         return false;
     }

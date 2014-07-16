@@ -228,6 +228,9 @@ app.adapters.webdb.project = (function () {
         findAllWithCode = function () {
             return app.adapters.webdb.select('*', table, 'BlocklyCode <> ?', [""] );
         },
+        findAllWithCodeAndContains = function (key) {
+            return app.adapters.webdb.select('*', table, 'BlocklyCode <> ? and Name LIKE "%'+key+'%"', [""] );
+        },
         findAll = function() {
             return app.adapters.webdb.select('*',table);
         }, 
@@ -239,6 +242,7 @@ app.adapters.webdb.project = (function () {
         findById: findById,
         findByName: findByName,
         findAllWithCode:findAllWithCode,
+        findAllWithCodeAndContains:findAllWithCodeAndContains,
         findAllUpdated:findAllUpdated,
         findAll: findAll,
         insert: insert,
@@ -304,6 +308,11 @@ app.adapters.webdb.userProject = (function () {
                                                 'projetos.id = usersProjects.ProjectId', 
                                                 'usersProjects.UserId = ?', [id]);
     },
+    findByUserIdAndContains = function (id, key) {
+           return app.adapters.webdb.selectJoin('projetos.*', 'projetos', table, 
+                                                'projetos.id = usersProjects.ProjectId', 
+                                                'usersProjects.UserId = ? and projetos.Name LIKE "%'+ key+'%"', [id]);
+    },
     findByProjectId= function (id) {
             return app.adapters.webdb.select('*', table, 'ProjectId = ?', [id]);
     },
@@ -337,6 +346,7 @@ app.adapters.webdb.userProject = (function () {
     return {
         findByUserId: findByUserId,
         findByProjectId: findByProjectId,
+        findByUserIdAndContains: findByUserIdAndContains,
         findAll: findAll,
         find: find,
         insert: insert,

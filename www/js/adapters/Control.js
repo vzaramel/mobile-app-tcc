@@ -13,13 +13,12 @@ app.Robot.Control = (function () {
   elapsedTime = 0,
   startTime =0,
   currentTime =0,
+  timers = [],
   
   
   generate_pwm = function(){
       
       //alert('generate_pwm');
-      
-              
             var timer = window.setInterval(function(){
                 //alert('interval PWM');
                 DTMF.startTone(
@@ -35,7 +34,7 @@ app.Robot.Control = (function () {
                     );
                 }, 
             period);
-            
+            timers.push(timer);
             return timer;
   },
   
@@ -52,13 +51,12 @@ app.Robot.Control = (function () {
       
       window.setTimeout(function(){
                
-                    
-                        window.clearInterval(timer);
-                        deferred.resolve();   
-                    
-                     
+             window.clearInterval(timer);
+             deferred.resolve();   
       },
       duration);
+      
+      timers.push(timer);
       
       return deferred.promise();
   },
@@ -153,6 +151,7 @@ app.Robot.Control = (function () {
                         }
                     }
                     speed = Math.abs(speed);
+                    
                     speed = speed/10 + 11;
                     if ( speed > 20 ){
                         speed = 20;
@@ -173,6 +172,9 @@ app.Robot.Control = (function () {
         },
       5);
       
+      timers.push(timer);
+      timers.push(timer2);
+      
       return deferred.promise();
       
   },
@@ -183,17 +185,27 @@ app.Robot.Control = (function () {
                 }, 
             10);
             
+            timers.push(timer);
             clearInterval(timer);
   },
   position_control = function(x, y, tone, speed){
       
+  },
+  
+  destroy = function(){
+        $.each(timers, function(i, timer){
+            //alert("timer: ", i);
+            window.clearInterval(timer);
+        });
   };
+  
   
   
   return {
       turn_control : turn_control,
       generate_pwm : generate_pwm,
-      move_control : move_control
+      move_control : move_control,
+      destroy : destroy
         
   };
     

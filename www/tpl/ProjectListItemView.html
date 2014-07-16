@@ -1,11 +1,16 @@
 <div>
-<a href="#project/<%= id %>">
-    <p><%= Name %></p>
-    <%if (Updated && BlocklyCode != null){ %>
-     <span class="chevron"></span><span class="arrow"></span>
-    <%}else{%>
-     <span class="chevron"></span><span class="count"></span>
-    <%}%>
-</a>
+	<div>
+		<a href="#project/<%= id %>">
+    		<p><%= Name %></p>
+    	
+    	<%if(Updated == 'true'){%>
+    		<span style="color:#00FF00">Atualizado</span>
+   		<%}else{%>
+   			<span style="color:#FF0000">Desatualizado</span>
+   		<%}%>
+    	</a>
+    	<button class="topcoat-button trash">
+    	</button>
+    </div>
 
 </div>

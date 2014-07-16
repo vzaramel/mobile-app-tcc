@@ -38,9 +38,9 @@ app.views.HomeView = Backbone.View.extend({
     },
     
     search: function (event) {
-        console.log("search");
+        //console.log("search");
         var key = $('.search-key').val();
-        this.projectList.fetch({reset: true, data: {Name: key}});
+        this.projectList.fetch({reset: true, data: {field: "Name", key: key}});
     },
 });
 

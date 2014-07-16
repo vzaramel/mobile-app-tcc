@@ -30,7 +30,7 @@
                 arrowDelay = ptrHeight / 3 * 2,
                 isActivated = false,
                 isLoading = false;
-                contentStartY = 71;
+                contentStartY = 130;
                 startY = 0;
                 track = false;
                 refresh = false;
@@ -83,7 +83,7 @@
                     return true;
                 }
                 if (-top > 0)
-                 e.css('top',(-top + 71));
+                 e.css('top',(-top + 130));
 
                 arrow.show();
                 arrow.css('transform', 'rotate('+ deg + 'deg)'); // move arrow
@@ -128,10 +128,10 @@
     
                     cfg.callback().done(function() {
                         e.animate({
-                                top:71
+                                top:130
                         }, 'fast', 'linear', function () {
                             e.css({
-                                top:'71px'
+                                top:'130px'
                             });
                             isLoading = false;
                         });
@@ -140,10 +140,10 @@
                 else{
                     
                         e.animate({
-                            top:71
+                            top:130
                         }, 'fast', 'linear', function () {
                             e.css({
-                                top:'71px'
+                                top:'130px'
                             });
                             isLoading = false;
                         });

@@ -10,6 +10,10 @@ app.views.ProjectListView = Backbone.View.extend({
         this.model.on("add", function (project) {
             self.$el.append(new app.views.ProjectListItemView({model:project}).render().el);
         });
+        this.model.on("remove", function(project){
+            //self.$el.remove();
+        });
+        
     },
 
     render:function () {
@@ -36,9 +40,20 @@ app.views.ProjectListItemView = Backbone.View.extend({
         
         "keyup .search-key":    "search",
         "keypress .search-key": "onkeypress",
-        "click .project-item": "onClick",
-        "click #btn_teste": "teste"
+        "click .trash": "onDelete",
        
+    },
+    
+    onDelete: function(){
+        
+        var response = confirm("Certeza que deseja deletar o projeto?");
+        if( response){
+            //+this.model.get("id")
+            this.$el.remove();
+            this.model.destroy();
+            //this = undefined;
+        }
+        
     },
 
     render:function () {
