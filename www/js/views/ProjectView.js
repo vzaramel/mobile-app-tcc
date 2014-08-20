@@ -36,6 +36,8 @@ app.views.ProjectView = Backbone.View.extend({
                 }); 
 
                 model.save();
+                
+                alert('Projeto Atualizado.');
 
             });
         }else{
@@ -63,10 +65,29 @@ app.views.ProjectView = Backbone.View.extend({
     },
     
     start: function(event){
-        eval(this.model.get("BlocklyCode"));
+        try{
+            this.stop();
+            app.Robot.initialize();
+            var that = this;
+            alert('Projeto Iniciado.');
+            window.setTimeout(function(){
+                eval(that.model.get("BlocklyCode"));
+            },1000);
+            //alert(this.model.get("BlocklyCode"));
+        }catch(err){
+            alert("ProjectView: "+ err.message);
+        }
     },
     stop: function(event){
-        app.Robot.Control.destroy();
+        try{
+            if( running){
+                app.Robot.destroy();
+                alert('Execução Parada');
+            }
+        }catch(err){
+            alert("ProjectView: "+ err.message);
+        }
+
     },
     back: function(event) {
         this.stop();

@@ -5,7 +5,7 @@
         </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
-        <h1 class="topcoat-navigation-bar__title">Project</h1>
+        <h1 class="topcoat-navigation-bar__title">Projeto</h1>
     </div>
     <button class="topcoat-button--cta trash"></button>
 </div>
@@ -13,24 +13,34 @@
 <div class='details'>
 	<div class="topcoat-list__container scroller">
         <ul class="topcoat-list list actions">
-       		<li class="topcoat-list__item center">
-				<h1>ID: <%= id %></h1>
-			</li>
-			<li class="topcoat-list__item center">
+			<div class="topcoat-list__item center">
     			<h1>Nome: <%= Name %></h1>
-    		</li>
-    		<li class="topcoat-list__item center">
-    			<h1>Atualizado: <%= Updated %></h1>
-    		</li>
-    		<li class="topcoat-list__item center">
-    			<h2>Descrição: <%= Description %></h2>
-    		</li>
-   		
-      		<li class="topcoat-list__item center">
-      				<button class="topcoat-button--cta start-button" style="width:18vh" >RUN</button>
-      				<button class="topcoat-button--cta stop-button" style="width:18vh" >STOP</button>
-        			<button class="topcoat-button--cta update-button" style="width:18vh">Update</button>
-        	</li>
+    		</div>
+    		<div class="topcoat-list__item center">
+    			<h1>Descrição: <%= Description %></h1>
+    		</div>
+   			<div class="topcoat-list__item center">
+				<div class="">
+					<button id="btn_login" class="topcoat-button--cta start-button" style="width:50vw">
+						Rodar
+					</button>
+				</div>
+			</div>
+			<div class="topcoat-list__item center">
+				<div class="">
+					<button id="btn_login" class="topcoat-button--cta stop-button" style="width:50vw">
+						Parar
+					</button>
+				</div>
+			</div>
+			<div class="topcoat-list__item center">
+				<div class="">
+					<button id="btn_login" class="topcoat-button--cta update-button" style="width:50vw">
+						Atualizar
+					</button>
+				</div>
+			</div>
+      		
 		</ul>
     </div>
     
